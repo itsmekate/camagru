@@ -1,16 +1,27 @@
 <?php
+include_once ROOT.'/models/Post.php';
+
   class PostController
   {
 
     public function actionIndex()
     {
-      echo "Post feed";
+      $postList = array();
+      $postList = Post::getPostList();
+
+      require_once(ROOT.'/views/posts/index.php');
+
+      // print_r($postList);
       return true;
     }
 
-    public function actionView()
+    public function actionView($user, $id)
     {
-      echo "One post";
+      if($id)
+      {
+        $postItem = Post::getPostItemById($id);
+        print_r($postItem);
+      }
       return true;
     }
 

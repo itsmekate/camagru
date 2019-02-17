@@ -40,7 +40,7 @@ class Router
         $actionName = 'action'.ucfirst(array_shift($segments));
 
         $controllerFile = ROOT.'/controllers/'.$controllerName.'.php';
-        print_r ($segments);
+        $params = $segments;
         // echo $controllerFile;
         if(file_exists($controllerFile))
         {
@@ -48,7 +48,10 @@ class Router
         }
 
         $controllerObject = new $controllerName;
-        $result = $controllerObject->$actionName();
+
+        $result = call_user_func_array(array($controllerObject, $actionName), $params);
+
+        // $result = $controllerObject->$actionName($params);
         if ($result != null)
         {
           break;
@@ -62,3 +65,5 @@ class Router
 }
 
 ?>
+
+<!-- 14:57 -->

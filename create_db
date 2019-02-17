@@ -1,0 +1,10 @@
+CREATE DATABASE camagru;
+
+CREATE TABLE Posts (
+    id int PRIMARY KEY,
+    user int NOT NULL,
+    image varchar(255) NOT NULL,
+    comments FOREIGN KEY //link to comments table
+    likes FOREIGN KEY // link to likes table
+    date datatype
+);
