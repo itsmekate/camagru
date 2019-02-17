@@ -28,7 +28,6 @@ class Router
     {
       if(preg_match("~$uriPattern~", $uri))
       {
-        // echo $uriPattern;
         $internalRoute = preg_replace("~$uriPattern~", $path, $uri);
 
         $segments = explode('/', $internalRoute);
@@ -41,7 +40,7 @@ class Router
 
         $controllerFile = ROOT.'/controllers/'.$controllerName.'.php';
         $params = $segments;
-        // echo $controllerFile;
+
         if(file_exists($controllerFile))
         {
           include_once($controllerFile);
@@ -51,7 +50,6 @@ class Router
 
         $result = call_user_func_array(array($controllerObject, $actionName), $params);
 
-        // $result = $controllerObject->$actionName($params);
         if ($result != null)
         {
           break;
@@ -65,5 +63,3 @@ class Router
 }
 
 ?>
-
-<!-- 14:57 -->

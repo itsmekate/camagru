@@ -11,7 +11,6 @@ include_once ROOT.'/models/Post.php';
 
       require_once(ROOT.'/views/posts/index.php');
 
-      // print_r($postList);
       return true;
     }
 
@@ -20,7 +19,8 @@ include_once ROOT.'/models/Post.php';
       if($id)
       {
         $postItem = Post::getPostItemById($id);
-        print_r($postItem);
+
+        // require_once(ROOT.'/views/posts/post.php');
       }
       return true;
     }

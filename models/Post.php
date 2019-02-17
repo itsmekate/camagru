@@ -1,7 +1,5 @@
 <?php
 
-
-
 class Post
 {
 
@@ -28,7 +26,7 @@ class Post
 
     $postList = array();
 
-    $result = $db->query('SELECT * '
+    $result = $db->query('SELECT id, user, date, image '
                         .'FROM posts');
                         // .'ORDER BY date DESC'
                         // .'LIMIT 10');
@@ -41,8 +39,9 @@ class Post
       $postList[$i]['date'] = $row['date'];
       $postList[$i]['image'] = $row['image'];
 
-      return $postList;
+      $i++;
     }
+          return $postList;
   }
 
 }

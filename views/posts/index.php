@@ -7,21 +7,30 @@
   <title>Document</title>
 </head>
 <body>
-  <?php foreach ($postList as $postItem):?>
-  <?php
-  echo $postItem['user'];
-   ?>
-  <!-- <a href="/post/ -->
+  <div class="container">
 
+    <div class="tile is-ancestor is-9">
   <?php
-  // echo $postItemp['id'];
-  ?>
+  foreach ($postList as $postItem): ?>
+    <div class="tile is-parent row">
+      <article class="tile is-child box">
+        <a href="<?php echo $postItem['id']; ?>">
+          <strong><?php echo $postItem['user'];?></strong>
+        </a>
 
-  <!-- "></a> -->
-  <!-- <div>
-    <img src="" alt="">
-  </div> -->
+        <small><?php echo $postItem['date'];?></small>
+        <figure class="image is-256x256">
+          <img src="<?php echo $postItem['image']; ?>" alt="Image">
+        </figure>
+        <input class="input is-rounded is-small" type="text">
+        <span class="icon">
+          <i class="fas fa-heart"></i>
+        </span>
+      </article>
+  </div>
 
   <?php endforeach; ?>
+      </div>
+    </div>
 </body>
 </html>
