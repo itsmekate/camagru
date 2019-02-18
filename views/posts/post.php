@@ -10,11 +10,9 @@
   <div class="container">
 
     <div class="tile is-ancestor is-9">
-  <?php
-  foreach ($postList as $postItem): ?>
     <div class="tile is-parent row">
       <article class="tile is-child box">
-        <a href="post/view/<?php echo $postItem['id']; ?>">
+        <a href="view/<?php echo $postItem['id']; ?>">
           <strong><?php echo $postItem['user'];?></strong>
         </a>
 
@@ -28,8 +26,6 @@
         </span>
       </article>
   </div>
-
-  <?php endforeach; ?>
       </div>
     </div>
 </body>

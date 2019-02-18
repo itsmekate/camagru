@@ -22,7 +22,7 @@ class Router
   {
     //get string
     $uri = $this->getURI();
-
+    // echo $uri;
     //check in routes.php
     foreach($this->routes as $uriPattern => $path)
     {
@@ -32,12 +32,12 @@ class Router
 
         $segments = explode('/', $internalRoute);
         array_shift($segments);
+        var_dump($segments);
 
         $controllerName = array_shift($segments).'Controller';
         $controllerName = ucfirst($controllerName);
 
         $actionName = 'action'.ucfirst(array_shift($segments));
-
         $controllerFile = ROOT.'/controllers/'.$controllerName.'.php';
         $params = $segments;
 
@@ -45,7 +45,7 @@ class Router
         {
           include_once($controllerFile);
         }
-
+        // echo $controllerFile;
         $controllerObject = new $controllerName;
 
         $result = call_user_func_array(array($controllerObject, $actionName), $params);
@@ -56,6 +56,7 @@ class Router
         }
 
       }
+
     }
 
 

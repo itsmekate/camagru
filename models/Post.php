@@ -11,7 +11,8 @@ class Post
     {
       $db = Db::getConnection();
 
-      $result = $db->query('SELECT * from post WHERE id='.$id);
+      $result = $db->query('SELECT * from posts WHERE id='.$id);
+
       // $result->setFetchMode(PDO::FETCH_NUM);
       $result->setFetchMode(PDO::FETCH_ASSOC);
       $postItem = $result->fetch();

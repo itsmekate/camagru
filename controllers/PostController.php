@@ -19,8 +19,8 @@ include_once ROOT.'/models/Post.php';
       if($id)
       {
         $postItem = Post::getPostItemById($id);
-
-        // require_once(ROOT.'/views/posts/post.php');
+        require_once(ROOT.'/views/posts/post.php');
+        // var_dump($postItem);
       }
       return true;
     }
