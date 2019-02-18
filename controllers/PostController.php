@@ -25,5 +25,11 @@ include_once ROOT.'/models/Post.php';
       return true;
     }
 
+    public function actionCreate()
+    {
+      Post::createPost();
+      require_once(ROOT.'/views/posts/create.php');
+    }
+
   }
 ?>

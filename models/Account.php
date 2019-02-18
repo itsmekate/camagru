@@ -2,14 +2,11 @@
 
 class Account
 {
-  private $username;
-  private $username_err;
-  private $password;
-  private $password_err;
+  // private $username;
+  // private $username_err;
+  // private $password;
+  // private $password_err;
 
-  // protected static $username = $password = "";
-  // protected static $username_err = $password_err = "";
-  // if($_SERVER["REQUEST_METHOD"] == "POST")
   public static function getName()
   {
     if($_SERVER["REQUEST_METHOD"] == "POST")
@@ -39,8 +36,8 @@ class Account
   public static function getUser($username)
   {
 
-    try{
-
+    try
+    {
       $db = Db::getConnection();
       $result = $db->query('SELECT * from users WHERE password=1111');
 
@@ -64,7 +61,7 @@ class Account
     }
 
   }
-  // public getEmail(){}
+
   public static function Login()
   {
     $username = Account::getName();
@@ -107,18 +104,19 @@ class Account
     session_destroy();
     require_once(ROOT.'/views/account/login.php');
   }
+
   public static function Register(){
 
     $username = $password = $confirm_password = "";
     $username_err = $password_err = $confirm_password_err = "";
     $db = Db::getConnection();
 
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-    //
+    if($_SERVER["REQUEST_METHOD"] == "POST")
+    {
         // Validate username
         if(empty(trim($_POST["username"])))
         {
-            $username_err = "Please enter a username.";
+          $username_err = "Please enter a username.";
         }
         else
         {
@@ -127,30 +125,46 @@ class Account
           $param_username = trim($_POST["username"]);
 
           $stmt= $db->prepare($sql);
-          if ($stmt->execute([$param_username, $param_password]) == 1)
+          $r = $stmt->execute([$param_username]);
+
+          echo $r;
+          if ($r != 1)
           {
             $username_err = "This username is already taken.";
+            echo $username_err;
           }
           else
           {
             $username = trim($_POST["username"]);
+            echo $username;
           }
         }
         // Validate password
         if(empty(trim($_POST["password"]))){
             $password_err = "Please enter a password.";
-        } elseif(strlen(trim($_POST["password"])) < 6){
+            echo $password_err;
+        }
+        elseif(strlen(trim($_POST["password"])) < 6)
+        {
             $password_err = "Password must have atleast 6 characters.";
-        } else{
+            echo $password_err;
+        }
+        else
+        {
             $password = trim($_POST["password"]);
+            echo $password;
         }
         // Validate confirm password
-        if(empty(trim($_POST["confirm_password"]))){
+        if(empty(trim($_POST["confirm_password"])))
+        {
             $confirm_password_err = "Please confirm password.";
+            echo $confirm_password_err;
         } else{
             $confirm_password = trim($_POST["confirm_password"]);
-            if(empty($password_err) && ($password != $confirm_password)){
+            if(empty($password_err) && ($password != $confirm_password))
+            {
                 $confirm_password_err = "Password did not match.";
+                echo $confirm_password_err;
             }
         }
     //
@@ -163,9 +177,18 @@ class Account
             $param_username = $username;
             $param_password = password_hash($password, PASSWORD_DEFAULT);
             $stmt= $db->prepare($sql);
-            $stmt->execute([$param_username, $param_password]);        }
+            $stmt->execute([$param_username, $param_password]);
 
-     echo "Something went wrong. Please try again later.";
+            $user['username']=$username;
+            $user['password']=$password;
+            $user['confirm_password']=$confirm_password;
+            $user['username_err']=$username_err;
+            $user['password_err']=$password_err;
+            $user['confirm_password_err']=$confirm_password_err;
+            return $user;
+          }
+
+     // echo "Something went wrong. Please try again later.";
     }
   }
 }

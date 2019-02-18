@@ -45,6 +45,64 @@ class Post
           return $postList;
   }
 
+  public static function createPost()
+  {
+    // echo "create post";
+    session_start();
+    $comment = $image = "";
+    $comment_err = $image_err = "";
+    // $username = $_SESSION["username"];
+    $username = 'test';
+    $date = date("Y-m-d H:i:s");
+
+    $db = Db::getConnection();
+
+    if($_SERVER["REQUEST_METHOD"] == "POST")
+    {
+        if(empty(trim($_POST["comment"]))) {
+          $comment_err = "Please enter a comment.";
+        } else {
+            $comment = trim($_POST["comment"]);
+            echo $comment;
+        }
+        if(empty(trim($_POST["image"]))){
+            $image_err = "Please upload an image.";
+            echo $image_err;
+        } else {
+            $image = trim($_POST["image"]);
+            echo $image;
+        }
+    // Check input errors before inserting in database
+        if(empty($comment_err)
+        && empty($image_err)
+        && !empty($username))
+        {
+            // $sql = "INSERT INTO posts (username, image, date, comment) VALUES (?,?,?,?)";
+            // $stmt= $db->prepare($sql);
+            try
+            {
+              $statement = $db->prepare(
+                "INSERT INTO `posts` (`id`, `user`, `date`, `image`, `likes`, `comments`)
+                 VALUES (?, ?, ?, ?, ?, ?)"
+               );
+              $statement->execute([5, $username, $date, $image, 0, 0]);
+            }
+            catch (Exception $e){
+                throw $e;
+            }
+            // echo $res;
+
+            $post['username']=$username;
+            $post['image']=$image;
+            $post['date']=$date;
+            $post['comment']=$comment;
+            $post['comment_err']=$comment_err;
+            $post['image_err']=$image_err;
+            // return $post;
+          }
+      }
+     // echo "Something went wrong. Please try again later.";
+    }
 }
 
 ?>

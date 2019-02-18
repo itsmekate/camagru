@@ -32,7 +32,7 @@ class Router
 
         $segments = explode('/', $internalRoute);
         array_shift($segments);
-        var_dump($segments);
+        // var_dump($segments);
 
         $controllerName = array_shift($segments).'Controller';
         $controllerName = ucfirst($controllerName);

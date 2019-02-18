@@ -28,7 +28,15 @@ include_once ROOT.'/models/Account.php';
     public function actionRegister()
     {
       $user = Account::Register();
+      $username = $user['username'];
+      $password = $user['password'];
+      $confirm_password = $user['confirm_password'];
+      $username_err = $user['username_err'];
+      $password_err = $user['password_err'];
+      $confirm_password_err = $user['confirm_password_err'];
+      var_dump($user);
       require_once(ROOT.'/views/account/register.php');
+      return true;
     }
   }
 
