@@ -5,7 +5,7 @@
     'port' => '8888',
     'dbname' => 'camagru',
     'user' => 'root',
-    'password' => '111111',
+    'password' => '5693669',
 
   );
 ?>

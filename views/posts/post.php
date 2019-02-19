@@ -13,7 +13,7 @@
     <div class="tile is-parent row">
       <article class="tile is-child box">
         <a href="view/<?php echo $postItem['id']; ?>">
-          <strong><?php echo $postItem['user'];?></strong>
+          <strong><?php echo $postItem['user_id'];?></strong>
         </a>
 
         <small><?php echo $postItem['date'];?></small>

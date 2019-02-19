@@ -11,7 +11,7 @@ class Post
     {
       $db = Db::getConnection();
 
-      $result = $db->query('SELECT * from posts WHERE id='.$id);
+      $result = $db->query('SELECT * from `Posts` WHERE id='.$id);
 
       // $result->setFetchMode(PDO::FETCH_NUM);
       $result->setFetchMode(PDO::FETCH_ASSOC);
@@ -27,8 +27,8 @@ class Post
 
     $postList = array();
 
-    $result = $db->query('SELECT id, user, date, image '
-                        .'FROM posts');
+    $result = $db->query('SELECT `id`, `user_id`, `date`, `image`'
+                        .'FROM `Posts`');
                         // .'ORDER BY date DESC'
                         // .'LIMIT 10');
 
@@ -36,7 +36,7 @@ class Post
     while($row = $result->fetch())
     {
       $postList[$i]['id'] = $row['id'];
-      $postList[$i]['user'] = $row['user'];
+      $postList[$i]['user_id'] = $row['user_id'];
       $postList[$i]['date'] = $row['date'];
       $postList[$i]['image'] = $row['image'];
 
@@ -82,10 +82,10 @@ class Post
             try
             {
               $statement = $db->prepare(
-                "INSERT INTO `posts` (`id`, `user`, `date`, `image`, `likes`, `comments`)
+                "INSERT INTO `posts` (`user_id`, `date`, `image`, `likes`, `comments`)
                  VALUES (?, ?, ?, ?, ?, ?)"
                );
-              $statement->execute([5, $username, $date, $image, 0, 0]);
+              $statement->execute([$username, $date, $image, 0, 0]);
             }
             catch (Exception $e){
                 throw $e;
