@@ -23,6 +23,7 @@ class Account
         $password = trim($_POST["password"]);
       }
     }
+    // echo $password;
     return $password;
   }
 
@@ -31,12 +32,12 @@ class Account
     try
     {
       $db = Db::getConnection();
-      $sql = "SELECT * FROM `User` WHERE `username` = ".$username;
+      $sql = "SELECT * FROM `user` WHERE `username` = ".$username;
       $res = $db->query($sql);
 
       if (!$res)
       {
-        $username_err = "This user doesn't exist.";
+        echo "here1";
         return 0;
       }
       else if($row = $res->fetch())
@@ -48,54 +49,68 @@ class Account
         $user['name'] = $row['name'];
         $user['surname'] = $row['surname'];
         // $user[$i]['image'] = $row['image']
+        echo "here2";
          return $user;
       }
     } catch (PDOException $e){
       echo "Unable to connect to DB!".$e->getMessage();
     }
-
+    echo "here";
+    return 0;
   }
 
   public static function Login()
   {
-    $username = Account::getName();
-
+    
+    $user['username'] = "";
+    $user['password'] = "";
     $user['username_err'] = "";
     $user['password_err'] = "";
-    $user['username'] = Account::getUser($username);
-    $user['password'] = Account::getPassword();
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
-        $full_user = Account::getUser($username);
-        if (!$full_user)
-        {
-           $user['username_err'] = "User doesn't exist";
-           return $user;
-        }
-
-        $pass = Account::getPassword();
-  
-        if ($user['username'] == 0)
-          $user['username_err'] = "Please enter a username.";
-        if ($user['password'] == 0)
-          $user['password_err'] = "Please enter your password.";
-
-        $hashed_pass = password_hash($user['password'], PASSWORD_DEFAULT);
-        if($user['username'] && $user['password'] && password_verify($full_user['password'], $hashed_pass)){
-          session_start();
-          $_SESSION["loggedin"] = true;
-          // $_SESSION["id"] = $id;
-          $_SESSION["username"] = $username;
-          echo "LOGGED IN";
-          // Redirect user to welcome page
-          // require_once(ROOT.'/views/posts/post.php');
-         } else {
-             $user['password_err'] = "The password you entered was not valid.";
-         }
+      $user['username'] = Account::getName();
+      if (empty($user['username'])) // check thay username is filled
+      {
+        $user['username_err'] = "Please enter a username.";
+        return $user;
       }
-      // var_dump($user);
-      return $user;
+
+      $user['password'] = Account::getPassword();
+      if (empty($user['password'])) //check that account exists
+      {
+        $user['password_err'] = "Please enter your password.";
+        return $user;
+      }
+
+      $full_user = Account::getUser($user['username']); // check that user exists
+
+      var_dump($full_user);
+      
+      if (!$full_user)
+      {
+         $user['username_err'] = "User doesn't exist";
+         return $user;
+      }
+
+      // $hashed_pass = password_hash($user['password'], PASSWORD_DEFAULT);
+
+      // if($user['username'] && $user['password'] && password_verify($full_user['password'], $hashed_pass))
+      // {
+        // session_start();
+        // $_SESSION["loggedin"] = true;
+        // $_SESSION["id"] = $id;
+        // $_SESSION["username"] = $username;
+        // echo "LOGGED IN";
+        // Redirect user to welcome page
+        // require_once(ROOT.'/views/posts/post.php');
+       // } 
+       // else 
+       // {
+           // $user['password_err'] = "The password you entered was not valid.";
+        // }   
+    }
+    return $user;
   }
 
 
@@ -124,32 +139,6 @@ class Account
     return $user;
   }
 
-  // public function validateUsername()
-  // {
-  //    if(empty(trim($_POST["username"])))
-  //       {
-  //         $username_err = "Please enter a username.";
-  //       }
-  //       else
-  //       {
-  //         $sql = "SELECT id FROM `User` WHERE `username` = ?";
-  //         $param_username = trim($_POST["username"]);
-  //         $stmt= $db->prepare($sql);
-  //         $r = $stmt->execute([$param_username]);
-
-  //         if ($r != 1)
-  //         {
-  //           $username_err = "This username is already taken.";
-  //         }
-  //         else
-  //         {
-  //           $username = trim($_POST["username"]);
-  //           // $validated++;
-  //         }
-  //       }
-  //       return ($username_err ? $username_err : $username);
-  // } 
-
   public static function Register(){
 
     $username = $password = $confirm_password = $email = $name = $surname = "";
@@ -165,12 +154,15 @@ class Account
         }
         else
         {
-          $sql = "SELECT id FROM `User` WHERE `username` = ?";
           $param_username = trim($_POST["username"]);
-          $stmt= $db->prepare($sql);
-          $r = $stmt->execute([$param_username]);
+          // $sql  = ;
+          $r = $db->query("SELECT `id` FROM `user` WHERE `username` = ".$username);
+          // $r->fetch();
+          // $stmt= $db->prepare($sql);
+          // $r = $stmt->execute([$param_username]);
+          var_dump($r);
 
-          if ($r != 1)
+          if ($r)
           {
             $username_err = "This username is already taken.";
           }
@@ -185,17 +177,24 @@ class Account
         }
         else
         {
-          $sql = "SELECT id FROM `User` WHERE `email` = ?";
 
           $param_email = trim($_POST["email"]);
+          $sql = "SELECT `id` FROM `user` WHERE `email` = ".$param_email;
+          $r = $db->query($sql);
 
-          $stmt= $db->prepare($sql);
-          $r = $stmt->execute([$param_email]);
 
-          if ($r != 1)
+          // $sql = "SELECT id FROM `User` WHERE `email` = ?";
+
+          // $param_email = trim($_POST["email"]);
+
+          // $stmt= $db->prepare($sql);
+          // $r = $stmt->execute([$param_email]);
+
+          if ($r)
           {
+            var_dump($r);
             $email_err = "This email is already registered.";
-            echo $email_err;
+            // echo $email_err;
           }
           else
           {

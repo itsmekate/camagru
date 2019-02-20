@@ -8,7 +8,7 @@
     'account/login' => 'account/login',
     'post/([a-z]+)/([0-9]+)' => 'post/view/$1/$2',
     'post/create' => 'post/create',
-    'post' => 'post/index',
+    'post/index' => 'post/index',
 
     // 'post//([a-z]+)/([0-9]+)' => 'post/view/',
     // 'feed' => 'post/index',

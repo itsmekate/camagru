@@ -27,7 +27,7 @@ class Post
 
     $postList = array();
 
-    $result = $db->query('SELECT `id`, `user_id`, `date`, `image`'
+    $result = $db->query('SELECT `id`, `user_id`, `date`, `image`, `likes`, `comments`'
                         .'FROM `Posts`');
                         // .'ORDER BY date DESC'
                         // .'LIMIT 10');
@@ -39,6 +39,8 @@ class Post
       $postList[$i]['user_id'] = $row['user_id'];
       $postList[$i]['date'] = $row['date'];
       $postList[$i]['image'] = $row['image'];
+      $postList[$i]['likes'] = $row['likes'];
+      $postList[$i]['comments'] = $row['comments'];
 
       $i++;
     }
@@ -82,10 +84,9 @@ class Post
             try
             {
               $statement = $db->prepare(
-                "INSERT INTO `posts` (`user_id`, `date`, `image`, `likes`, `comments`)
-                 VALUES (?, ?, ?, ?, ?, ?)"
+               " INSERT INTO `posts` (`user_id`, `image`, `comments`, `likes`, `date`) VALUES (?, ?, ?, ?, ?);"
                );
-              $statement->execute([$username, $date, $image, 0, 0]);
+              $statement->execute([$username, $image, 0, 0, '2019-02-20']);
             }
             catch (Exception $e){
                 throw $e;

@@ -1,0 +1,32 @@
+CREATE DATABASE camagru;
+
+CREATE TABLE `User` (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    `username` varchar(255) NOT NULL,
+    `email` varchar(255) NOT NULL,
+    `name` varchar(255) NOT NULL,
+    `surname` varchar(255) NOT NULL,
+    `password` varchar(255) NOT NULL,
+    `message` int DEFAULT 1,
+    `token` varchar(255)
+);
+
+CREATE TABLE `Posts` (
+    `id` int PRIMARY KEY AUTO_INCREMENT,
+    `user_id` int NOT NULL,
+    `image` varchar(255) NOT NULL,
+    `comments` int DEFAULT 0,
+    `likes` int DEFAULT 0,
+    `date` date
+);
+
+CREATE TABLE Likes (
+    `post_id` int NOT NULL,
+    `user_id` int NOT NULL
+);
+
+CREATE TABLE Comments (
+    `post_id` int NOT NULL,
+    `user_id` int NOT NULL,
+    `comment` varchar(255) NOT NULL
+);

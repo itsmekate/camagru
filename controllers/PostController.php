@@ -27,7 +27,9 @@ include_once ROOT.'/models/Post.php';
 
     public function actionCreate()
     {
-      Post::createPost();
+      $err = Post::createPost();
+      $comment_err = $err['comment_err'];
+      $image_err = $err['image_err'];
       require_once(ROOT.'/views/posts/create.php');
     }
 
