@@ -32,12 +32,11 @@ class Account
     try
     {
       $db = Db::getConnection();
-      $sql = "SELECT * FROM `user` WHERE `username` = ".$username;
+      $sql = "SELECT * FROM `user` WHERE `username` = '".$username."'";
       $res = $db->query($sql);
-
       if (!$res)
       {
-        echo "here1";
+        // echo "here1";
         return 0;
       }
       else if($row = $res->fetch())
@@ -49,19 +48,19 @@ class Account
         $user['name'] = $row['name'];
         $user['surname'] = $row['surname'];
         // $user[$i]['image'] = $row['image']
-        echo "here2";
+        // echo "here2";
          return $user;
       }
     } catch (PDOException $e){
       echo "Unable to connect to DB!".$e->getMessage();
     }
-    echo "here";
+    // echo "here";
     return 0;
   }
 
   public static function Login()
   {
-    
+
     $user['username'] = "";
     $user['password'] = "";
     $user['username_err'] = "";
@@ -85,7 +84,7 @@ class Account
 
       $full_user = Account::getUser($user['username']); // check that user exists
 
-      var_dump($full_user);
+      // var_dump($full_user);
       
       if (!$full_user)
       {
@@ -93,22 +92,22 @@ class Account
          return $user;
       }
 
-      // $hashed_pass = password_hash($user['password'], PASSWORD_DEFAULT);
-
-      // if($user['username'] && $user['password'] && password_verify($full_user['password'], $hashed_pass))
-      // {
-        // session_start();
-        // $_SESSION["loggedin"] = true;
+      $hashed_pass = hash("whirlpool", $user['password']);
+      echo strcmp($full_user['password'], $hashed_pass);
+      if($user['username'] && $user['password'] && !strcmp($full_user['password'], $hashed_pass))
+      {
+        session_start();
+        $_SESSION["loggedin"] = true;
         // $_SESSION["id"] = $id;
-        // $_SESSION["username"] = $username;
-        // echo "LOGGED IN";
+        $_SESSION["username"] = $user['username'];
+        echo "LOGGED IN";
         // Redirect user to welcome page
         // require_once(ROOT.'/views/posts/post.php');
-       // } 
-       // else 
-       // {
-           // $user['password_err'] = "The password you entered was not valid.";
-        // }   
+       } 
+       else 
+       {
+           $user['password_err'] = "The password you entered was not valid.";
+        }   
     }
     return $user;
   }
@@ -155,14 +154,7 @@ class Account
         else
         {
           $param_username = trim($_POST["username"]);
-          // $sql  = ;
-          $r = $db->query("SELECT `id` FROM `user` WHERE `username` = ".$username);
-          // $r->fetch();
-          // $stmt= $db->prepare($sql);
-          // $r = $stmt->execute([$param_username]);
-          var_dump($r);
-
-          if ($r)
+          if (Account::getUser($param_username))
           {
             $username_err = "This username is already taken.";
           }
@@ -177,24 +169,14 @@ class Account
         }
         else
         {
-
           $param_email = trim($_POST["email"]);
-          $sql = "SELECT `id` FROM `user` WHERE `email` = ".$param_email;
-          $r = $db->query($sql);
-
-
-          // $sql = "SELECT id FROM `User` WHERE `email` = ?";
-
-          // $param_email = trim($_POST["email"]);
-
-          // $stmt= $db->prepare($sql);
-          // $r = $stmt->execute([$param_email]);
-
-          if ($r)
+          // echo $param_email;
+          $sql = "SELECT * FROM `user` WHERE `email` = '".$param_email."'";
+          $res = $db->query($sql);
+          if ($row = $res->fetch())
           {
-            var_dump($r);
+            // var_dump($row);
             $email_err = "This email is already registered.";
-            // echo $email_err;
           }
           else
           {
@@ -261,7 +243,9 @@ class Account
           echo "ADDED";
             $sql = "INSERT INTO `User` (`username`, `password`, `surname`, `email`, `name`) VALUES (?,?,?,?,?)";
             $param_username = $username;
-            $param_password = password_hash($password, PASSWORD_DEFAULT);
+
+            $param_password = hash("whirlpool", $password);
+
             $stmt= $db->prepare($sql);
             $stmt->execute([$param_username, $param_password, $surname, $param_email, $name]);
           }
