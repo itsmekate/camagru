@@ -5,6 +5,7 @@
 
     'account/register' => 'account/register',
     'account/index' => 'account/index',
+    'account/([a-z]+)/([0-9]+)' => 'account/$1/$2',
     'account/login' => 'account/login',
     'post/([a-z]+)/([0-9]+)' => 'post/view/$1/$2',
     'post/create' => 'post/create',

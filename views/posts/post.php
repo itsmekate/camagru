@@ -1,32 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-  <div class="container">
-
-    <div class="tile is-ancestor is-9">
-    <div class="tile is-parent row">
-      <article class="tile is-child box">
-        <a href="view/<?php echo $postItem['id']; ?>">
-          <strong><?php echo $postItem['user_id'];?></strong>
-        </a>
-
-        <small><?php echo $postItem['date'];?></small>
-        <figure class="image is-256x256">
-          <img src="<?php echo $postItem['image']; ?>" alt="Image">
-        </figure>
-        <input class="input is-rounded is-small" type="text">
-        <span class="icon">
-          <i class="fas fa-heart"></i>
-        </span>
-      </article>
-  </div>
-      </div>
+<div class="card" style="width: 20rem;">
+    
+      <div class="card-body">
+          <img src="<?php echo $postItem['image']; ?>" class="card-img-top" alt="...">
+            <a href="view/<?php echo $postItem['id']; ?>"></a>
+          <h5 class="card-title"> <a href="post/view/<?php echo $postItem['id']; ?>"></h5>
+            <div class="additional_information">
+                <button class="comment-btn">
+                <span class="icon">
+                  <i class="fas fa-comment"></i>
+                  <p><?php echo $postItem['comments'] ; ?></p>
+                </span>
+              </button>
+              <button class="like-btn">
+                  <span class="icon">
+                    <i class="fas fa-heart"></i>
+                  </span>
+                  <p><?php echo $postItem['likes'] ; ?></p>
+              </button>
+            </div>          
+        </div>
     </div>
-</body>
-</html>

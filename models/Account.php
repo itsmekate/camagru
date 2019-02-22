@@ -33,6 +33,7 @@ class Account
     {
       $db = Db::getConnection();
       $sql = "SELECT * FROM `user` WHERE `username` = '".$username."'";
+
       $res = $db->query($sql);
       if (!$res)
       {
@@ -98,7 +99,7 @@ class Account
       {
         session_start();
         $_SESSION["loggedin"] = true;
-        // $_SESSION["id"] = $id;
+        $_SESSION["id"] = $full_user['id'];
         $_SESSION["username"] = $user['username'];
         echo "LOGGED IN";
         // Redirect user to welcome page
@@ -147,6 +148,8 @@ class Account
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
+        // var_dump($_POST);
+        // echo $_POST['obrf'];;
         if(empty(trim($_POST["username"])))
         {
           $username_err = "Please enter a username.";
@@ -170,12 +173,10 @@ class Account
         else
         {
           $param_email = trim($_POST["email"]);
-          // echo $param_email;
           $sql = "SELECT * FROM `user` WHERE `email` = '".$param_email."'";
           $res = $db->query($sql);
           if ($row = $res->fetch())
           {
-            // var_dump($row);
             $email_err = "This email is already registered.";
           }
           else
@@ -184,7 +185,6 @@ class Account
             $validated++;
           }
         }
-
         if(empty(trim($_POST["fname"])))
         {
           $name_err = "Please enter a name.";
@@ -241,7 +241,7 @@ class Account
             && empty($confirm_password_err))
         {
           echo "ADDED";
-            $sql = "INSERT INTO `User` (`username`, `password`, `surname`, `email`, `name`) VALUES (?,?,?,?,?)";
+            $sql = "INSERT INTO `user` (`username`, `password`, `surname`, `email`, `name`) VALUES (?,?,?,?,?)";
             $param_username = $username;
 
             $param_password = hash("whirlpool", $password);

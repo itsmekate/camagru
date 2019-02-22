@@ -11,3 +11,14 @@ body
 .wrapper{
 	width: 350px; padding: 20px;
 }
+
+img {
+  display: inline;
+}
+.like-btn + .comment-btn {
+  border: none;
+  height: 20px;
+}
+.additional_information {
+  display: inline;
+}

@@ -27,10 +27,7 @@ class Post
 
     $postList = array();
 
-    $result = $db->query('SELECT `id`, `user_id`, `date`, `image`, `likes`, `comments`'
-                        .'FROM `Posts`');
-                        // .'ORDER BY date DESC'
-                        // .'LIMIT 10');
+    $result = $db->query("SELECT * FROM `posts` ORDER BY date DESC LIMIT 10");
 
     $i = 0;
     while($row = $result->fetch())
@@ -49,51 +46,47 @@ class Post
 
   public static function createPost()
   {
-    // echo "create post";
     session_start();
     $comment = $image = "";
     $comment_err = $image_err = "";
-    // $username = $_SESSION["username"];
-    $username = 'test';
+    $user_id = $_SESSION["id"];
     $date = date("Y-m-d H:i:s");
 
     $db = Db::getConnection();
 
     if($_SERVER["REQUEST_METHOD"] == "POST")
     {
-        if(empty(trim($_POST["comment"]))) {
-          $comment_err = "Please enter a comment.";
-        } else {
-            $comment = trim($_POST["comment"]);
-            echo $comment;
-        }
-        if(empty(trim($_POST["image"]))){
-            $image_err = "Please upload an image.";
-            echo $image_err;
-        } else {
+      var_dump($_POST);
+         // if(empty(trim($_POST["comment"]))) {
+           // $comment_err = "Please enter a comment.";
+         // } else {
+             // $comment = trim($_POST["comment"]);
+         // }
+        // if(empty(trim($_POST["image"]))){
+            // $image_err = "Please upload an image.";
+            // echo $image_err;
+        // } else {
             $image = trim($_POST["image"]);
-            echo $image;
-        }
+        // }
     // Check input errors before inserting in database
-        if(empty($comment_err)
-        && empty($image_err)
-        && !empty($username))
+        if(empty($comment_err) &&
+         empty($image_err)
+        && !empty($user_id))
         {
             // $sql = "INSERT INTO posts (username, image, date, comment) VALUES (?,?,?,?)";
             // $stmt= $db->prepare($sql);
             try
             {
               $statement = $db->prepare(
-               " INSERT INTO `posts` (`user_id`, `image`, `comments`, `likes`, `date`) VALUES (?, ?, ?, ?, ?);"
+               "INSERT INTO `posts` (`user_id`, `image`, `comments`, `likes`, `date`) VALUES (?, ?, ?, ?, ?)"
                );
-              $statement->execute([$username, $image, 0, 0, '2019-02-20']);
+              $statement->execute([$user_id, $image, 0, 0, '2019-02-20']);
             }
             catch (Exception $e){
                 throw $e;
             }
-            // echo $res;
 
-            $post['username']=$username;
+            $post['username']=$_SESSION["username"];
             $post['image']=$image;
             $post['date']=$date;
             $post['comment']=$comment;
